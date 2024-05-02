@@ -14,8 +14,7 @@ class Reg(StatesGroup):
 
 @router.message(CommandStart())
 async def cmd_start(message: Message):
-    await message.reply('Hello world!', 
-                         reply_markup=kb.main)
+    await message.answer('Hello world!')
 
 @router.message(Command('help'))
 async def get_help(message: Message):
@@ -54,3 +53,5 @@ async def two_three(message: Message, state: FSMContext):
     data = await state.get_data()
     await message.answer(f'Спасибо, регистрация завершена. \nИмя:{data["name"]}\nНомер: {data["number"]}')
     await state.clear()
+
+    

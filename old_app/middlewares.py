@@ -6,4 +6,7 @@ class TestMiddleware(BaseMiddleware):
     async def __call__(self, handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]], 
                        event: TelegramObject, 
                        data: Dict[str, Any]) -> Any:
-        return await super().__call__(handler, event, data)
+        print('Действия обработчика')
+        result = await handler(event, data)
+        print('Действия после обработчика')
+        return result
