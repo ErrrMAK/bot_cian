@@ -19,6 +19,7 @@ class DialogState(StatesGroup):
     waiting_for_name = State()
     waiting_for_type_legend = State()
 
+# Старт диалога
 @router.message(Command("start"))
 async def cmd_start(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(
@@ -32,19 +33,22 @@ async def with_puree(message: Message, state: FSMContext):
     await state.set_state(DialogState.waiting_for_name)
     await message.answer("Напишите Ваше имя для диалога:")
 
+
 # Обработчик для получения имени
 @router.message(DialogState.waiting_for_name)
 async def get_name(message: Message, state: FSMContext):
     await state.update_data(name=message.text)
     await state.set_state(DialogState.waiting_for_type_legend)
-    await message.answer(tx.legend_type)
+    await message.answer(tx.legend_type, reply_markup=kb.button_type_legend)
 
 # Обработчик для получения типа легенды
-@router.message(DialogState.waiting_for_type_legend)
-async def get_legend(message: Message, state: FSMContext):
+@router.callback_query(DialogState.waiting_for_type_legend)
+async def get_legend(query: types.CallbackQuery, state: FSMContext):
+    await query.answer()
+    await state.update_data(type_legend=query.data)
+
     user_data = await state.get_data()
-    name = user_data['name']  # Извлекаем сохраненное имя
-    legend = message.text  # Сохраняем полученный тип легенды
-    # Здесь можно добавить сохранение данных в CSV, если это требуется
-    await message.answer(f"Привет, {name}, ваш выбранный тип легенды: {legend}!")
+    name = user_data['name']
+    type_legend = user_data['type_legend']
+    await query.message.answer(f"Привет, {name}, ваш выбранный тип: {type_legend}!")
     await state.clear()  # Очищаем состояние

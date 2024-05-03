@@ -2,7 +2,7 @@ from aiogram import F, Router
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.state import StatesGroup, State
-import app.keyboards as kb
+import old_app.keyboards as kb
 from aiogram.fsm.context import FSMContext
 
 router = Router()
@@ -35,11 +35,11 @@ async def catalog(callback: CallbackQuery):
     await callback.message.edit_text('Привет!', reply_markup=await kb.inline_cars())
 
 
+
 @router.message(Command('reg'))
 async def reg_one(message: Message, state: FSMContext):
     await state.set_state(Reg.name)
     await message.answer('Введите Ваше имя')
-
 
 @router.message(Reg.name)
 async def reg_two(message: Message, state: FSMContext):
