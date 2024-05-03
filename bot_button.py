@@ -23,3 +23,4 @@ button_type_legend = InlineKeyboardMarkup(
         InlineKeyboardButton(text='Агент', callback_data='Агент'),
     ]
 ])
+

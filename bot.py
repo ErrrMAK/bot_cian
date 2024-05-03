@@ -5,7 +5,8 @@ from aiogram.filters.command import Command
 from config import TOKEN
 import bot_button as bt
 import texts as tx
-from bot_handlers import router
+import handlers.dispetchers as disp
+import handlers.flats as flats
 
 
 # Включаем логирование, чтобы не пропустить важные сообщения
@@ -23,7 +24,7 @@ dp = Dispatcher()
 
 # Запуск процесса поллинга новых апдейтов
 async def main():
-    dp.include_router(router)
+    dp.include_routers(disp.router, flats.router)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
